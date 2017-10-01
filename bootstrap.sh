@@ -59,17 +59,16 @@ sudo pacman -Syy
 # =================パッケージの更新===================
 sudo pacman -Syu --noconfirm
 
-## GUI環境
+
+## =================GUI環境===================
 sudo pacman -S --noconfirm xorg-xinit
 yes 'all' | sudo pacman -S --noconfirm xfce4
 yes 'all' | sudo pacman -S --noconfirm lightdm
 sudo pacman -S --noconfirm lightdm-gtk-greeter
 sudo systemctl enable lightdm.service
+# /etc/systemd/system/default.targetのリンクをmulti-user.targetからgraphical.targetに変える
+sudo systemctl set-default graphical.target
 
-## CUI環境
-# ### CUI filer
-# sudo pacman -S ranger
-# sudo pacman -Syu --noconfirm
 
 # =================yaourtによるインストール===================
 yaourt -Syua --noconfirm
@@ -77,7 +76,7 @@ yaourt -S --noconfirm man-pages-ja-git
 yaourt -S --noconfirm peco
 
 
-# # =================全パッケージのアップデート===================
+# =================全パッケージのアップデート===================
 sudo pacman -Syu --noconfirm
 yaourt -Syua --noconfirm
 
