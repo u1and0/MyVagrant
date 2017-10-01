@@ -69,6 +69,11 @@ sudo systemctl enable lightdm.service
 # /etc/systemd/system/default.targetのリンクをmulti-user.targetからgraphical.targetに変える
 sudo systemctl set-default graphical.target
 
+## =================自動ログイン===================
+sudo cat /etc/lightdm/lightdm.conf |
+    sudo sed -e 's/#autologin-user=/autologin-user=vagrant/' | sudo tee /etc/lightdm/lightdm.conf
+sudo groupadd -r autologin
+sudo gpasswd -a vagrant autologin
 
 # =================yaourtによるインストール===================
 yaourt -Syua --noconfirm
