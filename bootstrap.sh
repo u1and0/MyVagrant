@@ -49,7 +49,7 @@ sudo pacman -Syy
 
 
 # =================パッケージの更新===================
-# sudo pacman -Syu --noconfirm
+sudo pacman -Syu --noconfirm
 
 
 ## =================GUI環境===================
@@ -87,20 +87,21 @@ sudo localectl set-keymap jp106
 
 ## =================自動ログイン===================
 sudo cat /etc/lightdm/lightdm.conf |
-    sudo sed -e 's/#autologin-user=/autologin-user=vagrant/' | sudo tee /etc/lightdm/lightdm.conf
+    sudo sed -e 's/#autologin-user=/autologin-user=vagrant/' |
+        sudo tee /etc/lightdm/lightdm.conf
 sudo groupadd -r autologin
 sudo gpasswd -a vagrant autologin
 # ↑一回目のログインはユーザー名とパスワード(どちらもvagrnat)打たないといけない
 
 # =================yaourtによるインストール===================
-# yaourt -Syua --noconfirm
-# yaourt -S --noconfirm man-pages-ja-git
-# yaourt -S --noconfirm peco
+yaourt -Syua --noconfirm
+yaourt -S --noconfirm man-pages-ja-git
+yaourt -S --noconfirm peco
 
 
 # =================全パッケージのアップデート===================
-# sudo pacman -Syu --noconfirm
-# yaourt -Syua --noconfirm
+sudo pacman -Syu --noconfirm
+yaourt -Syua --noconfirm
 
 # =================ログインshellをzshに変更===================
 sudo chsh vagrant -s /usr/bin/zsh
