@@ -8,17 +8,6 @@ test -f /etc/bootstrapped && exit
 # タイムゾーン設定
 sudo timedatectl set-timezone Asia/Tokyo
 
-# __日本語設定__________________________
-sudo cat << 'EOF' | sudo tee /etc/locale.conf
-LANG=ja_JP.UTF8
-LC_NUMERIC=ja_JP.UTF8
-LC_TIME=ja_JP.UTF8
-LC_MONETARY=ja_JP.UTF8
-LC_PAPER=ja_JP.UTF8
-LC_MEASUREMENT=ja_JP.UTF8
-EOF
-
-
 
 # =================dotfilesのクローン===================
 git clone -b arch https://github.com/u1and0/dotfiles.git
@@ -36,12 +25,15 @@ sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bac
 sudo cat << 'EOF' | sudo tee /etc/pacman.d/mirrorlist
 ##
 ## Arch Linux repository mirrorlist
-## Generated on 2017-06-28
+## Filtered by mirror score from mirror status page
+## Generated on 2017-10-08
 ##
 
-# Japan
-Server = http://ftp.tsukuba.wide.ad.jp/Linux/archlinux/$repo/os/$arch
+## Japan
+Server = https://ftp.jaist.ac.jp/pub/Linux/ArchLinux/$repo/os/$arch
+Server = https://jpn.mirror.pkgbuild.com/$repo/os/$arch
 Server = http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/$repo/os/$arch
+Server = http://ftp.tsukuba.wide.ad.jp/Linux/archlinux/$repo/os/$arch
 
 # Main
 Server = http://mirrors.kernel.org/archlinux/$repo/os/$arch
@@ -69,6 +61,37 @@ sudo systemctl enable lightdm.service
 # /etc/systemd/system/default.targetのリンクをmulti-user.targetからgraphical.targetに変える
 sudo systemctl set-default graphical.target
 
+## =================日本語環境の構築===================
+sudo cat << 'EOF' | sudo tee /etc/locale.conf
+LANG=ja_JP.UTF8
+LC_NUMERIC=ja_JP.UTF8
+LC_TIME=ja_JP.UTF8
+LC_MONETARY=ja_JP.UTF8
+LC_PAPER=ja_JP.UTF8
+LC_MEASUREMENT=ja_JP.UTF8
+EOF
+
+### =================フォントとインプットメソッドのインストール===================
+sudo pacman -S --noconfirm otf-ipafont
+yes 'all' | sudo pacman -S --noconfirm fcitx-im fcitx-configtool fcitx-mozc
+
+sudo cat << 'EOF' > ${HOME}/.xprofile
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=”@im=fcitx”
+EOF
+
+# =================キーボードの設定===================
+sudo localectl set-keymap jp106
+
+
+## =================自動ログイン===================
+sudo cat /etc/lightdm/lightdm.conf |
+    sudo sed -e 's/#autologin-user=/autologin-user=vagrant/' |
+        sudo tee /etc/lightdm/lightdm.conf
+sudo groupadd -r autologin
+sudo gpasswd -a vagrant autologin
+# ↑一回目のログインはユーザー名とパスワード(どちらもvagrnat)打たないといけない
 
 # =================yaourtによるインストール===================
 yaourt -Syua --noconfirm
@@ -87,3 +110,4 @@ sudo chsh vagrant -s /usr/bin/zsh
 # ====================================
 # 実行したときの時間書き込み
 date | sudo tee /etc/bootstrapped
+sudo reboot
