@@ -8,17 +8,6 @@ test -f /etc/bootstrapped && exit
 # タイムゾーン設定
 sudo timedatectl set-timezone Asia/Tokyo
 
-# __日本語設定__________________________
-sudo cat << 'EOF' | sudo tee /etc/locale.conf
-LANG=ja_JP.UTF8
-LC_NUMERIC=ja_JP.UTF8
-LC_TIME=ja_JP.UTF8
-LC_MONETARY=ja_JP.UTF8
-LC_PAPER=ja_JP.UTF8
-LC_MEASUREMENT=ja_JP.UTF8
-EOF
-
-
 
 # =================dotfilesのクローン===================
 git clone -b arch https://github.com/u1and0/dotfiles.git
@@ -57,7 +46,7 @@ sudo pacman -Syy
 
 
 # =================パッケージの更新===================
-sudo pacman -Syu --noconfirm
+# sudo pacman -Syu --noconfirm
 
 
 ## =================GUI環境===================
@@ -69,21 +58,46 @@ sudo systemctl enable lightdm.service
 # /etc/systemd/system/default.targetのリンクをmulti-user.targetからgraphical.targetに変える
 sudo systemctl set-default graphical.target
 
+## =================日本語環境の構築===================
+sudo cat << 'EOF' | sudo tee /etc/locale.conf
+LANG=ja_JP.UTF8
+LC_NUMERIC=ja_JP.UTF8
+LC_TIME=ja_JP.UTF8
+LC_MONETARY=ja_JP.UTF8
+LC_PAPER=ja_JP.UTF8
+LC_MEASUREMENT=ja_JP.UTF8
+EOF
+
+### =================フォントとインプットメソッドのインストール===================
+sudo pacman -S --noconfirm otf-ipafont
+yes 'all' | sudo pacman -S --noconfirm fcitx-im fcitx-configtool fcitx-mozc
+
+sudo cat << 'EOF' > ${HOME}/.xprofile
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=”@im=fcitx”
+EOF
+
+# =================キーボードの設定===================
+sudo localectl set-keymap jp106
+
+
 ## =================自動ログイン===================
 sudo cat /etc/lightdm/lightdm.conf |
     sudo sed -e 's/#autologin-user=/autologin-user=vagrant/' | sudo tee /etc/lightdm/lightdm.conf
 sudo groupadd -r autologin
 sudo gpasswd -a vagrant autologin
+# ↑一回目のログインはユーザー名とパスワード(どちらもvagrnat)打たないといけない
 
 # =================yaourtによるインストール===================
-yaourt -Syua --noconfirm
-yaourt -S --noconfirm man-pages-ja-git
-yaourt -S --noconfirm peco
+# yaourt -Syua --noconfirm
+# yaourt -S --noconfirm man-pages-ja-git
+# yaourt -S --noconfirm peco
 
 
 # =================全パッケージのアップデート===================
-sudo pacman -Syu --noconfirm
-yaourt -Syua --noconfirm
+# sudo pacman -Syu --noconfirm
+# yaourt -Syua --noconfirm
 
 # =================ログインshellをzshに変更===================
 sudo chsh vagrant -s /usr/bin/zsh
@@ -92,3 +106,4 @@ sudo chsh vagrant -s /usr/bin/zsh
 # ====================================
 # 実行したときの時間書き込み
 date | sudo tee /etc/bootstrapped
+sudo reboot
