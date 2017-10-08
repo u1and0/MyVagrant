@@ -25,12 +25,15 @@ sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bac
 sudo cat << 'EOF' | sudo tee /etc/pacman.d/mirrorlist
 ##
 ## Arch Linux repository mirrorlist
-## Generated on 2017-06-28
+## Filtered by mirror score from mirror status page
+## Generated on 2017-10-08
 ##
 
-# Japan
-Server = http://ftp.tsukuba.wide.ad.jp/Linux/archlinux/$repo/os/$arch
+## Japan
+Server = https://ftp.jaist.ac.jp/pub/Linux/ArchLinux/$repo/os/$arch
+Server = https://jpn.mirror.pkgbuild.com/$repo/os/$arch
 Server = http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/$repo/os/$arch
+Server = http://ftp.tsukuba.wide.ad.jp/Linux/archlinux/$repo/os/$arch
 
 # Main
 Server = http://mirrors.kernel.org/archlinux/$repo/os/$arch
