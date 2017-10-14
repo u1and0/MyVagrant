@@ -22,24 +22,7 @@ cd ${HOME} && rmdir dotfiles
 
 ## =================mirrorlist書き換え===================
 sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bac
-sudo cat << 'EOF' | sudo tee /etc/pacman.d/mirrorlist
-##
-## Arch Linux repository mirrorlist
-## Filtered by mirror score from mirror status page
-## Generated on 2017-10-08
-##
-
-## Japan
-Server = https://ftp.jaist.ac.jp/pub/Linux/ArchLinux/$repo/os/$arch
-Server = https://jpn.mirror.pkgbuild.com/$repo/os/$arch
-Server = http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/$repo/os/$arch
-Server = http://ftp.tsukuba.wide.ad.jp/Linux/archlinux/$repo/os/$arch
-
-# Main
-Server = http://mirrors.kernel.org/archlinux/$repo/os/$arch
-Server = https://mirrors.kernel.org/archlinux/$repo/os/$arch
-EOF
-
+sudo reflector --verbose --country 'Japan' -l 10 --sort rate --save /etc/pacman.d/mirrorlist
 
 ## =================locale generate===================
 sudo mv /etc/locale.gen /etc/locale.gen.bac
