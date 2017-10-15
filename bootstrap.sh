@@ -9,39 +9,10 @@ test -f /etc/bootstrapped && exit
 sudo timedatectl set-timezone Asia/Tokyo
 
 
-# =================dotfilesのクローン===================
-git clone -b arch https://github.com/u1and0/dotfiles.git
-# クローンしたすべてのファイルをホームへ移動
-cd ${HOME}/dotfiles 
-for i in `ls -A`
-do
-    mv -f $i ${HOME}
-done
-cd ${HOME} && rmdir dotfiles
-
-# =================powerpillインストール===================
-gpg --recv-keys --keyserver hkp://pgp.mit.edu 1D1F0DC78F173680 
-yaourt -S --noconfirm powerpill
-
-# ## =================mirrorlist書き換え===================
-# sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bac
-# sudo cat << 'EOF' | sudo tee /etc/pacman.d/mirrorlist
-# ##
-# ## Arch Linux repository mirrorlist
-# ## Filtered by mirror score from mirror status page
-# ## Generated on 2017-10-08
-# ##
-
-# ## Japan
-# Server = https://ftp.jaist.ac.jp/pub/Linux/ArchLinux/$repo/os/$arch
-# Server = https://jpn.mirror.pkgbuild.com/$repo/os/$arch
-# Server = http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/$repo/os/$arch
-# Server = http://ftp.tsukuba.wide.ad.jp/Linux/archlinux/$repo/os/$arch
-
-# # Main
-# Server = http://mirrors.kernel.org/archlinux/$repo/os/$arch
-# Server = https://mirrors.kernel.org/archlinux/$repo/os/$arch
-# EOF
+## =================mirrorlist書き換え===================
+sudo pacman -S --noconfirm reflector
+sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bac
+sudo reflector --verbose --country 'Japan' -l 10 --sort rate --save /etc/pacman.d/mirrorlist
 
 
 ## =================locale generate===================
@@ -49,7 +20,12 @@ sudo mv /etc/locale.gen /etc/locale.gen.bac
 echo ja_JP.UTF-8 UTF-8 | sudo tee /etc/locale.gen
 sudo locale-gen
 sudo pacman -Syy
-sudo powerpill -Syu
+
+
+# =================powerpillインストール===================
+gpg --recv-keys --keyserver hkp://pgp.mit.edu 1D1F0DC78F173680 
+yaourt -S --noconfirm powerpill
+sudo powerpill -Syu --noconfirm
 
 # =================パッケージの更新===================
 # sudo pacman -Syu --noconfirm
@@ -106,7 +82,20 @@ sudo powerpill -Syu
 # sudo pacman -Syu --noconfirm
 # yaourt -Syua --noconfirm
 
-# =================ログインshellをzshに変更===================
+
+# =================shell環境構築===================
+## =================dotfilesのクローン===================
+git clone -b arch https://github.com/u1and0/dotfiles.git
+# クローンしたすべてのファイルをホームへ移動
+cd ${HOME}/dotfiles
+for i in `ls -A`
+do
+    mv -f $i ${HOME}
+done
+cd ${HOME} && rmdir dotfiles
+
+
+## =================ログインshellをzshに変更===================
 sudo chsh vagrant -s /usr/bin/zsh
 
 
