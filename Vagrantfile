@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-  # config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network "forwarded_port", guest: 80, host: 8080
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -44,16 +44,19 @@ Vagrant.configure("2") do |config|
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
-  config.vm.provider "virtualbox" do |vb|
-    # Display the VirtualBox GUI when booting the machine
-    vb.gui = true
-    vb.customize ["modifyvm", :id, "--memory", "1024"]
-    vb.customize ["modifyvm", :id, "--ioapic", "on"]
-    vb.customize ["modifyvm", :id, "--vram", "128"]
-    vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
-    # クリップボードの共有: 双方向
-    vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
-  end
+  GUI=true
+  if GUI 
+	  config.vm.provider "virtualbox" do |vb|
+	    # Display the VirtualBox GUI when booting the machine
+	    vb.gui = true
+	    vb.customize ["modifyvm", :id, "--memory", "1024"]
+	    vb.customize ["modifyvm", :id, "--ioapic", "on"]
+	    vb.customize ["modifyvm", :id, "--vram", "128"]
+	    vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
+	    # クリップボードの共有: 双方向
+	    vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+	  end
+  end 
   
   # View the documentation for the provider you are using for more
   # information on available options.
