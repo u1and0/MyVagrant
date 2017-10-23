@@ -84,7 +84,7 @@ sudo powerpill -Syu --noconfirm
 
 # =================shell環境構築===================
 ## =================dotfilesのクローン===================
-git clone -b arch https://github.com/u1and0/dotfiles.git
+git clone -b develop https://github.com/u1and0/dotfiles.git
 # クローンしたすべてのファイルをホームへ移動
 cd ${HOME}/dotfiles
 for i in `ls -A`
