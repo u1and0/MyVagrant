@@ -50,7 +50,7 @@ sudo systemctl set-default graphical.target
 
 
 ## =================フォントとインプットメソッドのインストール===================
-sudo pacman -S --noconfirm otf-takao
+yaourt -S --noconfirm otf-takao
 yes 'all' | sudo pacman -S --noconfirm fcitx-im fcitx-configtool fcitx-mozc
 
 sudo cat << 'EOF' > ${HOME}/.xprofile
