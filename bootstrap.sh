@@ -87,7 +87,7 @@ yaourt -S --noconfirm gitflow-avh-git  # git-flow tools
 
 # =================shell環境構築===================
 ## =================dotfilesのクローン===================
-git clone -b develop https://github.com/u1and0/dotfiles.git
+git clone --recursive -b develop https://github.com/u1and0/dotfiles.git
 cd ${HOME}/dotfiles  # クローンしたすべてのファイルをホームへ移動
 for i in `ls -A`
 do
