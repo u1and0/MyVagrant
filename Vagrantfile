@@ -43,23 +43,22 @@ Vagrant.configure("2") do |config|
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
-  #
   config.vm.provider "virtualbox" do |vb|
     vb.customize ["modifyvm", :id, "--memory", "1024"]
   end
-  GUI=false
-  if GUI 
-	  config.vm.provider "virtualbox" do |vb|
-	    # Display the VirtualBox GUI when booting the machine
-	    vb.gui = true
-	    vb.customize ["modifyvm", :id, "--ioapic", "on"]
-	    vb.customize ["modifyvm", :id, "--vram", "128"]
-	    vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
-	    # クリップボードの共有: 双方向
-	    vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
-	  end
-  end 
-  
+  GUI=true
+  if GUI
+    config.vm.provider "virtualbox" do |vb|
+      # Display the VirtualBox GUI when booting the machine
+      vb.gui = true
+      vb.customize ["modifyvm", :id, "--ioapic", "on"]
+      vb.customize ["modifyvm", :id, "--vram", "128"]
+      vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
+      # クリップボードの共有: 双方向
+      vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+    end
+  end
+
   # View the documentation for the provider you are using for more
   # information on available options.
 
@@ -70,7 +69,10 @@ Vagrant.configure("2") do |config|
   #   push.app = "YOUR_ATLAS_USERNAME/YOUR_APPLICATION_NAME"
   # end
 
-  # Cach option
+  # Cach plugin
+  # `vagrant plugin install vagrant-cachier`
+  # packageのキャッシュをディスクに保存
+  # 次回vagrant up時にpackage更新が早い
   if Vagrant.has_plugin?("vagrant-cachier")
     config.cache.enable :pacman
   end
