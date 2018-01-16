@@ -72,6 +72,14 @@ sudo gpasswd -a vagrant autologin
 # ↑一回目のログインはユーザー名とパスワード(どちらもvagrnat)打たないといけない
 
 
+# =====================dockerセットアップ==========================
+sudo pacman -S --noconfirm docker
+sudo systemctl enable docker
+sudo groupadd docker
+sudo gpasswd -a vagrant docker
+sudo systemctl restart docker
+
+
 # =================その他好きなもの===================
 yaourt -S --noconfirm man-pages-ja-git  # 日本語man
 # yaourt -S --noconfirm peco  # Simplistic interactive filtering tool
