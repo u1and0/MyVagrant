@@ -73,7 +73,8 @@ sudo gpasswd -a vagrant autologin
 
 
 # =====================dockerセットアップ==========================
-sudo pacman -S docker
+sudo pacman -S --noconfirm docker
+sudo systemctl enable docker
 sudo groupadd docker
 sudo gpasswd -a vagrant docker
 sudo systemctl restart docker
