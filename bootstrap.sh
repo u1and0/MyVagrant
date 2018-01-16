@@ -85,7 +85,7 @@ sudo pacman -S --noconfirm fzf  # Simplistic interactive filtering tool
 sudo pacman -S --noconfirm thefuck  # Corrects your previous console command
 sudo pacman -S --noconfirm atool  # Managing file archives of various types
 yaourt -S --noconfirm gitflow-avh-git  # git-flow tools
-
+sudo pacman -S --noconfirm python-pygments pygmentize  # Python syntax highlighter
 
 # =================全パッケージのアップデート===================
 sudo powerpill -Syu --noconfirm
