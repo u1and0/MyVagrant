@@ -81,7 +81,6 @@ sudo systemctl restart docker
 
 # =================その他好きなもの===================
 yaourt -S --noconfirm man-pages-ja-git  # 日本語man
-sudo pacman -S --noconfirm fzf  # Simplistic interactive filtering tool
 sudo pacman -S --noconfirm thefuck  # Corrects your previous console command
 sudo pacman -S --noconfirm atool  # Managing file archives of various types
 yaourt -S --noconfirm gitflow-avh-git  # git-flow tools
