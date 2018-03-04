@@ -45,7 +45,7 @@ Vagrant.configure("2") do |config|
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   config.vm.provider "virtualbox" do |vb|
-    vb.customize ["modifyvm", :id, "--memory", "1024"]
+    vb.customize ["modifyvm", :id, "--memory", "2048"]
     # クリップボードの共有: 双方向
     vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
   end
