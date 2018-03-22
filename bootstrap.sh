@@ -25,7 +25,8 @@ sudo pacman -Syy
 
 # =================pacman強化===================
 ## =================powerpillインストール===================
-gpg --recv-keys --keyserver hkp://pgp.mit.edu 1D1F0DC78F173680
+# gpg --recv-keys --keyserver hkp://pgp.mit.edu 1D1F0DC78F173680  # 動かない
+gpg --recv-keys 1D1F0DC78F173680   
 yaourt -S --noconfirm powerpill  # Use powerpill instead of pacman. Bye pacman...
 
 ### =================powerpill SigLevel書き換え===================
@@ -93,7 +94,7 @@ yaourt -Syua --noconfirm
 
 # =================shell環境構築===================
 ## =================dotfilesのクローン===================
-git clone --recursive --depth 1 https://github.com/u1and0/dotfiles.git
+git clone --recursive https://github.com/u1and0/dotfiles.git
 cd ${HOME}/dotfiles  # クローンしたすべてのファイルをホームへ移動
 for i in `ls -A`
 do
