@@ -25,7 +25,8 @@ sudo pacman -Syy
 
 # =================pacman強化===================
 ## =================powerpillインストール===================
-gpg --recv-keys --keyserver hkp://pgp.mit.edu 1D1F0DC78F173680
+# gpg --recv-keys --keyserver hkp://pgp.mit.edu 1D1F0DC78F173680  # 動かない
+gpg --recv-keys 1D1F0DC78F173680   
 yaourt -S --noconfirm powerpill  # Use powerpill instead of pacman. Bye pacman...
 
 ### =================powerpill SigLevel書き換え===================
