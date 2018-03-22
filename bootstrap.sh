@@ -81,28 +81,33 @@ sudo systemctl restart docker
 
 # =================その他好きなもの===================
 yaourt -S --noconfirm man-pages-ja-git  # 日本語man
-sudo pacman -S --noconfirm fzf  # Simplistic interactive filtering tool
 sudo pacman -S --noconfirm thefuck  # Corrects your previous console command
 sudo pacman -S --noconfirm atool  # Managing file archives of various types
 yaourt -S --noconfirm gitflow-avh-git  # git-flow tools
-sudo pacman -S --noconfirm python-pygments pygmentize  # Python syntax highlighter
+sudo pacman -S --noconfirm vimpager  # Syntax color highlighting pager
 
 # =================全パッケージのアップデート===================
-sudo powerpill -Syu --noconfirm
-yaourt -Syua --noconfirm
+# sudo powerpill -Syu --noconfirm
+# yaourt -Syua --noconfirm
 
 
 # =================shell環境構築===================
 ## =================dotfilesのクローン===================
-git clone --recursive --depth 1 https://github.com/u1and0/dotfiles.git
+git clone --recursive https://github.com/u1and0/dotfiles.git
+
 cd ${HOME}/dotfiles  # クローンしたすべてのファイルをホームへ移動
-for i in `ls -A`
-do
+for i in `ls -A`; do
     mv -f $i ${HOME}
 done
+
+cd ${HOME}/dotfiles/.config
+for i in `ls -A`; do
+    mv -f $i ${HOME}/.config
+done
+
 # `mv`の代わりに`cp`を使っても良いが、`cp *`だけだとドットファイル移動できないので、
 # `cp .*`も使う必要あり。冗長的なので`ls -A`と`mv`で一回で移動できるようにしました。
-cd ${HOME} && rmdir dotfiles
+cd ${HOME} && rmdir dotfiles/.config && rmdir dotfiles
 
 
 ## =================ログインshellをzshに変更===================
