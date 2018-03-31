@@ -82,7 +82,7 @@ Vagrant.configure("2") do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   # run as root=>True, run as user=>False
-   config.vm.provision :shell, :path => "bootstrap.sh", :privileged => false
+  config.vm.provision :shell, :path => "bootstrap.sh", :privileged => false
   # config.vm.provision "shell", inline: <<-SHELL
   #   apt-get update
   #   apt-get install -y apache2

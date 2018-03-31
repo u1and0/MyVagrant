@@ -16,7 +16,7 @@ LC_MONETARY=ja_JP.UTF8
 LC_PAPER=ja_JP.UTF8
 LC_MEASUREMENT=ja_JP.UTF8
 EOF
-sudo mv /etc/locale.gen /etc/locale.gen.bac
+sudo mv /etc/locale.gen{,.bac}
 echo ja_JP.UTF-8 UTF-8 | sudo tee /etc/locale.gen
 sudo locale-gen
 sudo pacman -Syy
@@ -37,7 +37,7 @@ sudo cat /etc/pacman.conf |
 
 ## =================mirrorlist書き換え===================
 sudo pacman -S --noconfirm reflector
-sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bac
+sudo cp /etc/pacman.d/mirrorlist{,.bac}
 sudo reflector --verbose --country 'Japan' -l 10 --sort rate --save /etc/pacman.d/mirrorlist
 
 
@@ -65,9 +65,11 @@ sudo localectl set-keymap jp106
 
 
 ## =================自動ログイン===================
-sudo cat /etc/lightdm/lightdm.conf |
-    sudo sed -e 's/#autologin-user=/autologin-user=vagrant/' |
-        sudo tee /etc/lightdm/lightdm.conf
+sudo sed -ie 's/#autologin-user=/autologin-user=vagrant/' /etc/lightdm/lightdm.conf
+
+# sudo cat /etc/lightdm/lightdm.conf |
+#     sudo sed -e 's/#autologin-user=/autologin-user=vagrant/' |
+#         sudo tee /etc/lightdm/lightdm.conf
 sudo groupadd -r autologin
 sudo gpasswd -a vagrant autologin
 # ↑一回目のログインはユーザー名とパスワード(どちらもvagrnat)打たないといけない
