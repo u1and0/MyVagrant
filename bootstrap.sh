@@ -41,9 +41,6 @@ yaourt -S --noconfirm powerpill  # Use powerpill instead of pacman. Bye pacman..
 
 ### =================powerpillエラー出ないようにSigLevel書き換え===================
 sudo sed -ie 's/Required DatabaseOptional/PackageRequired/' /etc/pacman.conf
-# sudo cat /etc/pacman.conf |
-#     sudo sed -e 's/Required DatabaseOptional/PackageRequired/' |
-#         sudo tee /etc/pacman.conf
 
 
 # =================GUI環境===================
@@ -71,9 +68,6 @@ sudo localectl set-keymap jp106
 ## =================自動ログイン===================
 sudo sed -ie 's/#autologin-user=/autologin-user=vagrant/' /etc/lightdm/lightdm.conf
 
-# sudo cat /etc/lightdm/lightdm.conf |
-#     sudo sed -e 's/#autologin-user=/autologin-user=vagrant/' |
-#         sudo tee /etc/lightdm/lightdm.conf
 sudo groupadd -r autologin
 sudo gpasswd -a vagrant autologin
 # ↑一回目のログインはユーザー名とパスワード(どちらもvagrnat)打たないといけない
@@ -96,33 +90,6 @@ yaourt -S --noconfirm man-pages-ja-git gitflow-avh-git
 # man-page-ja-git: 日本語man
 # gitflow-avh-git: git-flow tools
 
-# =================全パッケージのアップデート===================
-# sudo powerpill -Syu --noconfirm
-# yaourt -Syua --noconfirm
-
-
-# # =================shell環境構築===================
-# ## =================dotfilesのクローン===================
-# git clone --recursive https://github.com/u1and0/dotfiles.git
-#
-# cd ${HOME}/dotfiles  # クローンしたすべてのファイルをホームへ移動
-# for i in `ls -A`; do
-#     mv -f $i ${HOME}
-# done
-#
-# cd ${HOME}/dotfiles/.config
-# for i in `ls -A`; do
-#     mv -f $i ${HOME}/.config
-# done
-#
-# # `mv`の代わりに`cp`を使っても良いが、`cp *`だけだとドットファイル移動できないので、
-# # `cp .*`も使う必要あり。冗長的なので`ls -A`と`mv`で一回で移動できるようにしました。
-# cd ${HOME} && rmdir dotfiles/.config && rmdir dotfiles
-#
-#
-# ## =================ログインshellをzshに変更===================
-# sudo chsh vagrant -s /usr/bin/zsh
-#
 
 # ================End of bootstraping====================
 # 実行したときの時間書き込み
