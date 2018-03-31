@@ -123,5 +123,11 @@ sudo pacman -S --noconfirm vimpager  # Syntax color highlighting pager
 
 # ================End of bootstraping====================
 # 実行したときの時間書き込み
-date | sudo tee /etc/bootstrapped
+cat $0 | sudo tee /etc/bootstrapped
+
+
+# **********First Login**********
+#         username: vagrant
+#         password: vagrant
+# *******************************
 sudo reboot
