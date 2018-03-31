@@ -22,24 +22,28 @@ sudo locale-gen
 sudo pacman -Syy
 
 
-
 # =================pacman強化===================
-## =================powerpillインストール===================
-# gpg --recv-keys --keyserver hkp://pgp.mit.edu 1D1F0DC78F173680  # 動かない
-gpg --recv-keys 1D1F0DC78F173680   
-yaourt -S --noconfirm powerpill  # Use powerpill instead of pacman. Bye pacman...
-
-### =================powerpill SigLevel書き換え===================
-sudo cat /etc/pacman.conf |
-    sudo sed -e 's/Required DatabaseOptional/PackageRequired/' |
-        sudo tee /etc/pacman.conf
-
-
 ## =================mirrorlist書き換え===================
 sudo pacman -S --noconfirm reflector
 sudo cp /etc/pacman.d/mirrorlist{,.bac}
 sudo reflector --verbose --country 'Japan' -l 10 --sort rate --save /etc/pacman.d/mirrorlist
 
+
+# ========== Remove libxfont for pacman datebase error==========
+sudo pacman -Rdd --noconfirm libxfont
+sudo pacman -Syu --noconfirm
+
+
+## =================powerpillインストール===================
+# gpg --recv-keys --keyserver hkp://pgp.mit.edu 1D1F0DC78F173680  # Dosn't work
+gpg --recv-keys 1D1F0DC78F173680
+yaourt -S --noconfirm powerpill  # Use powerpill instead of pacman. Bye pacman...
+
+### =================powerpillエラー出ないようにSigLevel書き換え===================
+sudo sed -ie 's/Required DatabaseOptional/PackageRequired/' /etc/pacman.conf
+# sudo cat /etc/pacman.conf |
+#     sudo sed -e 's/Required DatabaseOptional/PackageRequired/' |
+#         sudo tee /etc/pacman.conf
 
 
 # =================GUI環境===================
