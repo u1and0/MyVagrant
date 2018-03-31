@@ -98,28 +98,28 @@ sudo pacman -S --noconfirm vimpager  # Syntax color highlighting pager
 # yaourt -Syua --noconfirm
 
 
-# =================shell環境構築===================
-## =================dotfilesのクローン===================
-git clone --recursive https://github.com/u1and0/dotfiles.git
-
-cd ${HOME}/dotfiles  # クローンしたすべてのファイルをホームへ移動
-for i in `ls -A`; do
-    mv -f $i ${HOME}
-done
-
-cd ${HOME}/dotfiles/.config
-for i in `ls -A`; do
-    mv -f $i ${HOME}/.config
-done
-
-# `mv`の代わりに`cp`を使っても良いが、`cp *`だけだとドットファイル移動できないので、
-# `cp .*`も使う必要あり。冗長的なので`ls -A`と`mv`で一回で移動できるようにしました。
-cd ${HOME} && rmdir dotfiles/.config && rmdir dotfiles
-
-
-## =================ログインshellをzshに変更===================
-sudo chsh vagrant -s /usr/bin/zsh
-
+# # =================shell環境構築===================
+# ## =================dotfilesのクローン===================
+# git clone --recursive https://github.com/u1and0/dotfiles.git
+#
+# cd ${HOME}/dotfiles  # クローンしたすべてのファイルをホームへ移動
+# for i in `ls -A`; do
+#     mv -f $i ${HOME}
+# done
+#
+# cd ${HOME}/dotfiles/.config
+# for i in `ls -A`; do
+#     mv -f $i ${HOME}/.config
+# done
+#
+# # `mv`の代わりに`cp`を使っても良いが、`cp *`だけだとドットファイル移動できないので、
+# # `cp .*`も使う必要あり。冗長的なので`ls -A`と`mv`で一回で移動できるようにしました。
+# cd ${HOME} && rmdir dotfiles/.config && rmdir dotfiles
+#
+#
+# ## =================ログインshellをzshに変更===================
+# sudo chsh vagrant -s /usr/bin/zsh
+#
 
 # ================End of bootstraping====================
 # 実行したときの時間書き込み
