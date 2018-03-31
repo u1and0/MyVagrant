@@ -87,11 +87,14 @@ sudo gpasswd -a vagrant docker  # sudoなしで使えるようにする設定
 sudo systemctl restart docker
 
 # =================その他好きなもの===================
-yaourt -S --noconfirm man-pages-ja-git  # 日本語man
-sudo pacman -S --noconfirm thefuck  # Corrects your previous console command
-sudo pacman -S --noconfirm atool  # Managing file archives of various types
-yaourt -S --noconfirm gitflow-avh-git  # git-flow tools
-sudo pacman -S --noconfirm vimpager  # Syntax color highlighting pager
+sudo pacman -S --noconfirm thefuck atool vimpager
+# the fuck: Corrects your previous console command
+# atool: Managing file archives of various types
+# vimpager: Syntax color highlighting pager
+
+yaourt -S --noconfirm man-pages-ja-git gitflow-avh-git
+# man-page-ja-git: 日本語man
+# gitflow-avh-git: git-flow tools
 
 # =================全パッケージのアップデート===================
 # sudo powerpill -Syu --noconfirm
