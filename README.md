@@ -4,15 +4,13 @@
 
 
 # はよ
-* [Vagrant Cloud](https://app.vagrantup.com/u1and0/boxes/archlinux)
+* [Vagrant Cloud / u1and0/archlinux](https://app.vagrantup.com/u1and0/boxes/archlinux)
 
 ```Shell-session
-vagrant init u1and0/archlinux \
-  --box-version 1.0.0
-vagrant up
+$ vagrant init u1and0/archlinux --box-version 1.0.0
+$ vagrant up
 ``` 
 
-```
 Archlinux for Japanese
 
 日本語 / GUI環境のArchlinuxです。
@@ -29,7 +27,7 @@ Archlinux for Japanese
 * man-page-ja-git: 日本語man
 * gitflow-avh-git: git-flow tools
 * /etc/boostrapedを見るとterrywang/archlinuxのboxに対して実行したこと(provisioning)がわかります。
-```
+
 
 # まえがき
 [VirtualBox 用 Ubuntu 16.04 LTS "Xenial Xerus" 日本語デスクトップ イメージ](https://qiita.com/yuki-takei/items/056e1184680f572d4c3d)のArchlinux版みたいなのが欲しくて作りました。
@@ -39,7 +37,8 @@ Archlinux for Japanese
 
 `bootstrap.sh`を書き換えることである程度のカスタマイズが可能です。いらない部分はコメントアウトし、個人的に必要だと思った部分は適宜書き加えて使用してください。
 
-特に、"bootstrap.sh"の最後の方では[私のdotfiles](https://github.com/u1and0/dotfiles.git)をクローンしてくるので、その点はご自分のdotfilesリポジトリに書き換えることをお勧めします。しかしながらdotfilesの使用、書換を禁じているわけではありませんので、"bootstrap.sh"をそのまま使っていただいてもかまいません。
+~~特に、"bootstrap.sh"の最後の方では[私のdotfiles](https://github.com/u1and0/dotfiles.git)をクローンしてくるので、その点はご自分のdotfilesリポジトリに書き換えることをお勧めします。しかしながらdotfilesの使用、書換を禁じているわけではありませんので、"bootstrap.sh"をそのまま使っていただいてもかまいません。~~
+> dotfilesは自動的にcloneしないようにしました。
 
 また、shellscriptを追っていけば単純に「Archlinuxことはじめ」としても使えると思います。(ネットワーク設定とか細かいことはterrywangさんが既にカスタマイズしてくれている模様)
 
@@ -65,7 +64,7 @@ Archlinux for Japanese
 OSはwindows10 64bitで試しました。vagrantとVirtualBoxは常に最新版同士を使うことが良いとは限らないようで、私はこの組み合わせでうまくいきました。両者とも最新版は出ているのに1年くらい更新していません…。(試すのが面倒なだけです)
 
 terrywang/archlinuxは更新頻度が高く、ダウンロード数も多く比較的信頼できるArchlinuxイメージだと思います。(自己責任でダウンロードしてください)
-イメージファイルは`vagrant box add terrywang/archlinux`または`vagrant init terrywang/archlinux`で取得できます。
+~~イメージファイルは`vagrant box add terrywang/archlinux`または`vagrant init terrywang/archlinux`で取得できます。~~
 
 
 # [Archlinux](https://wiki.archlinux.jp/index.php/Arch_Linux)
@@ -87,83 +86,65 @@ terrywang/archlinuxは更新頻度が高く、ダウンロード数も多く比�
 
 
 # 使い方
-`https://github.com/u1and0/MyVagrant.gitからgit clone`でインストールしてください。イメージファイル以外に必要なファイルは次の二つです。
+~~`https://github.com/u1and0/MyVagrant.gitからgit clone`でインストールしてください。イメージファイル以外に必要なファイルは次の二つです。~~
 
-* `Vagrantfile`
-* `bootstrap.sh`
+* ~~`Vagrantfile`~~
+* ~~`bootstrap.sh`~~
 
-
-
-```shell-session:MyVagrantのクローン
-$ cd ~
-$ mkdir -p ~/VirtualMachines/archlinux
-$ git clone https://github.com/u1and0/MyVagrant.git ~/VirtualMachines/archlinux
-```
-
-`VirtualMachines`, `archlinux`といったディレクトリを作成していますが、適宜自分用の名前に変更してください。
-
-```shell-session:vagrant立ち上げ
-$ cd ~/VirtualMachines/archlinux
-$ vagrant up
-# ...立ち上げに数十分
-$ vagrant ssh
-```
-
-
-
-
-
-
-
-
-
-
-
+`vagrant init u1and0/archlinux --box-version 1.0.0` や`vagrant box add `vagrant box add https://app.vagrantup.com/u1and0/boxes/archlinux`などでboxをダウンロードし、Vagrantfileを適宜書き換えて下さい。
 
 
 # Vagrantfile
-Vagrantfileの構成で必要最低限は以下の3点
+Vagrantfileの構成で必要最低限は以下の~~3~~2点
 
-1. `bootstrap.sh実行`の指示
+1. ~~`bootstrap.sh実行`の指示~~
 2. GUI(=デスクトップ)環境設定
-3. NTFSでやるなら`config.ssh.insert_key=false`
+3. Windowの方など、ファイルシステムがNTFSなら`config.ssh.insert_key=false`
 
-```ruby:bootstrap.shを実行するのに必要
-config.vm.provision :shell, :path => "bootstrap.sh", :privileged => false
-```
+以下、最低限のVagrantfile
 
-`bootstrap.sh`と`Vagrantfile`が同じディレクトリにある必要があります。
+```ruby:Vagrantfile
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
 
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure("2") do |config|
 
+  config.vm.box = "u1and0/archlinux"
+  config.vm.box_version = "1.0.0"
 
-```ruby:GUI環境でやるなら必要
-GUI=true
-if GUI
+  # GUI起動
+  # Provider-specific configuration so you can fine-tune various
+  # backing providers for Vagrant. These expose provider-specific options.
+  # Example for VirtualBox:
   config.vm.provider "virtualbox" do |vb|
-    # Display the VirtualBox GUI when booting the machine
-    vb.gui = true
-    vb.customize ["modifyvm", :id, "--ioapic", "on"]
-    vb.customize ["modifyvm", :id, "--vram", "128"]
-    vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
+    vb.customize ["modifyvm", :id, "--memory", "2048"]
     # クリップボードの共有: 双方向
     vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
   end
+  GUI=true
+  if GUI
+    config.vm.provider "virtualbox" do |gui|
+      # Display the VirtualBox GUI when booting the machine
+      gui.gui = true
+      gui.customize ["modifyvm", :id, "--ioapic", "on"]
+      gui.customize ["modifyvm", :id, "--vram", "128"]
+      gui.customize ["modifyvm", :id, "--accelerate3d", "on"]
+    end
+  end
+
+  # NTFS環境
+  config.ssh.insert_key=false  # root user ssh for sharing with windows machine
 end
 ```
 
-`GUI=false`にすれば`vb.gui`以降の行が機能しないので、仮想マシンのウィンドウが開かず、ホスト側のターミナルからのssh接続だけで操作することとなります。
-
-
-```ruby:NTFS環境
-config.ssh.insert_key=false  # root user ssh for sharing with windows machine
-```
-
-ファイルシステムがNTFS(つまりwindowsファイルシステム)でやるなら必要です。
 
 * [stack overflow - Private key to connect to the machine via SSH must be owned by the user running Vagrant](https://stackoverflow.com/questions/35964050/private-key-to-connect-to-the-machine-via-ssh-must-be-owned-by-the-user-running)
 
 
-以上を全部書いて、こまごまとしたものを書いたのがリポジトリ上のVagrantfileです。
 
 
 
@@ -182,6 +163,10 @@ config.ssh.insert_key=false  # root user ssh for sharing with windows machine
 
 
 # bootstrap.sh
+[terrywang/archlinux](https://app.vagrantup.com/terrywang/boxes/archlinux)に対して追加したプロビジョニングです。
+GUI設定や日本語manの追加や日本時間の設定など。
+
+
 ## /etc/bootstrappedというファイルがあれば終了
 ```bash:/etc/bootstrappedというファイルがあれば終了
 test -f /etc/bootstrapped && exit
@@ -440,6 +425,11 @@ GUIを立ち上げずssh接続のみで使うなら不要。
 
 
 # 追記v1.0.0
-* [Vagrant Cloud](https://app.vagrantup.com/u1and0/boxes/archlinux)にアップしました。
+* [Vagrant Cloud](https://app.vagrantup.com/u1and0/boxes/archlinux)にboxファイルをアップしました。
 * [xorgprotoとlibxfontによるパッケージアップデートの失敗](http://archlinux-blogger.blogspot.jp/2018/02/xorgprotoerror-failed-to-prepare.html)を回避しました。
-* これからは`bootstrap.sh`によるビルドはやめて`vagrant box add u1and0/archlinux`や`vagrant init u1and0/archlinux`から始めましょう。
+* これからは`bootstrap.sh`によるビルドはやめて
+
+```Shell-session
+$ vagrant init u1and0/archlinux --box-version 1.0.0
+$ vagrant up
+```
