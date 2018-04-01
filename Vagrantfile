@@ -38,8 +38,8 @@ Vagrant.configure("2") do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
-  config.vm.synced_folder "~/Dropbox", "/home/vagrant/Dropbox", owner: "vagrant", group: "vagrant"
-  config.vm.synced_folder "~/.history", "/home/vagrant/.history", owner: "vagrant", group: "vagrant"
+  # config.vm.synced_folder "~/Dropbox", "/home/vagrant/Dropbox", owner: "vagrant", group: "vagrant"
+  # config.vm.synced_folder "~/.history", "/home/vagrant/.history", owner: "vagrant", group: "vagrant"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -49,7 +49,7 @@ Vagrant.configure("2") do |config|
     # クリップボードの共有: 双方向
     vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
   end
-  GUI=false
+  GUI=true
   if GUI
     config.vm.provider "virtualbox" do |gui|
       # Display the VirtualBox GUI when booting the machine
