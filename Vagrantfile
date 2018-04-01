@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-  config.vm.network "forwarded_port", guest: 8888, host: 8888
+  # config.vm.network "forwarded_port", guest: 8888, host: 8888
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -38,24 +38,25 @@ Vagrant.configure("2") do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
-   config.vm.synced_folder "~/Dropbox", "/home/vagrant/Dropbox", owner: "vagrant", group: "vagrant"
+  # config.vm.synced_folder "~/Dropbox", "/home/vagrant/Dropbox", owner: "vagrant", group: "vagrant"
+  # config.vm.synced_folder "~/.history", "/home/vagrant/.history", owner: "vagrant", group: "vagrant"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   config.vm.provider "virtualbox" do |vb|
-    vb.customize ["modifyvm", :id, "--memory", "1024"]
+    vb.customize ["modifyvm", :id, "--memory", "2048"]
+    # クリップボードの共有: 双方向
+    vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
   end
   GUI=true
   if GUI
-    config.vm.provider "virtualbox" do |vb|
+    config.vm.provider "virtualbox" do |gui|
       # Display the VirtualBox GUI when booting the machine
-      vb.gui = true
-      vb.customize ["modifyvm", :id, "--ioapic", "on"]
-      vb.customize ["modifyvm", :id, "--vram", "128"]
-      vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
-      # クリップボードの共有: 双方向
-      vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+      gui.gui = true
+      gui.customize ["modifyvm", :id, "--ioapic", "on"]
+      gui.customize ["modifyvm", :id, "--vram", "128"]
+      gui.customize ["modifyvm", :id, "--accelerate3d", "on"]
     end
   end
 
@@ -81,7 +82,7 @@ Vagrant.configure("2") do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   # run as root=>True, run as user=>False
-   config.vm.provision :shell, :path => "bootstrap.sh", :privileged => false
+  config.vm.provision :shell, :path => "bootstrap.sh", :privileged => false
   # config.vm.provision "shell", inline: <<-SHELL
   #   apt-get update
   #   apt-get install -y apache2

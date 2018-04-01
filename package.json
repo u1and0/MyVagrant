@@ -1,0 +1,15 @@
+{
+    "description": "Archlinux x86_64",
+    "short_description": "Archlinux with GUI (xfce4), docker, Japanese man/font/keyboard",
+    "name": "u1and0/archlinux",
+    "versions": [{
+        "version": "1.0.0",
+        "status": "active",
+        "description_html": "<p>Archlinux x86_64</p>",
+        "description_markdown": "Archlinux x86_64",
+        "providers": [{
+            "name": "virtualbox",
+            "url": "file:package.box"
+        }]
+    }]
+}

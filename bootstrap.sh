@@ -16,29 +16,31 @@ LC_MONETARY=ja_JP.UTF8
 LC_PAPER=ja_JP.UTF8
 LC_MEASUREMENT=ja_JP.UTF8
 EOF
-sudo mv /etc/locale.gen /etc/locale.gen.bac
+sudo mv /etc/locale.gen{,.bac}
 echo ja_JP.UTF-8 UTF-8 | sudo tee /etc/locale.gen
 sudo locale-gen
 sudo pacman -Syy
 
 
-
 # =================pacman強化===================
-## =================powerpillインストール===================
-gpg --recv-keys --keyserver hkp://pgp.mit.edu 1D1F0DC78F173680
-yaourt -S --noconfirm powerpill  # Use powerpill instead of pacman. Bye pacman...
-
-### =================powerpill SigLevel書き換え===================
-sudo cat /etc/pacman.conf |
-    sudo sed -e 's/Required DatabaseOptional/PackageRequired/' |
-        sudo tee /etc/pacman.conf
-
-
 ## =================mirrorlist書き換え===================
 sudo pacman -S --noconfirm reflector
-sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bac
+sudo cp /etc/pacman.d/mirrorlist{,.bac}
 sudo reflector --verbose --country 'Japan' -l 10 --sort rate --save /etc/pacman.d/mirrorlist
 
+
+# ========== Remove libxfont for pacman datebase error==========
+sudo pacman -Rdd --noconfirm libxfont
+sudo pacman -Syu --noconfirm
+
+
+## =================powerpillインストール===================
+# gpg --recv-keys --keyserver hkp://pgp.mit.edu 1D1F0DC78F173680  # Dosn't work
+gpg --recv-keys 1D1F0DC78F173680
+yaourt -S --noconfirm powerpill  # Use powerpill instead of pacman. Bye pacman...
+
+### =================powerpillエラー出ないようにSigLevel書き換え===================
+sudo sed -ie 's/Required DatabaseOptional/PackageRequired/' /etc/pacman.conf
 
 
 # =================GUI環境===================
@@ -64,9 +66,8 @@ sudo localectl set-keymap jp106
 
 
 ## =================自動ログイン===================
-sudo cat /etc/lightdm/lightdm.conf |
-    sudo sed -e 's/#autologin-user=/autologin-user=vagrant/' |
-        sudo tee /etc/lightdm/lightdm.conf
+sudo sed -ie 's/#autologin-user=/autologin-user=vagrant/' /etc/lightdm/lightdm.conf
+
 sudo groupadd -r autologin
 sudo gpasswd -a vagrant autologin
 # ↑一回目のログインはユーザー名とパスワード(どちらもvagrnat)打たないといけない
@@ -80,36 +81,23 @@ sudo gpasswd -a vagrant docker  # sudoなしで使えるようにする設定
 sudo systemctl restart docker
 
 # =================その他好きなもの===================
-yaourt -S --noconfirm man-pages-ja-git  # 日本語man
-sudo pacman -S --noconfirm fzf  # Simplistic interactive filtering tool
-sudo pacman -S --noconfirm thefuck  # Corrects your previous console command
-sudo pacman -S --noconfirm atool  # Managing file archives of various types
-yaourt -S --noconfirm gitflow-avh-git  # git-flow tools
-sudo pacman -S --noconfirm python-pygments pygmentize  # Python syntax highlighter
+sudo pacman -S --noconfirm thefuck atool vimpager
+# the fuck: Corrects your previous console command
+# atool: Managing file archives of various types
+# vimpager: Syntax color highlighting pager
 
-# =================全パッケージのアップデート===================
-sudo powerpill -Syu --noconfirm
-yaourt -Syua --noconfirm
-
-
-# =================shell環境構築===================
-## =================dotfilesのクローン===================
-git clone --recursive --depth 1 https://github.com/u1and0/dotfiles.git
-cd ${HOME}/dotfiles  # クローンしたすべてのファイルをホームへ移動
-for i in `ls -A`
-do
-    mv -f $i ${HOME}
-done
-# `mv`の代わりに`cp`を使っても良いが、`cp *`だけだとドットファイル移動できないので、
-# `cp .*`も使う必要あり。冗長的なので`ls -A`と`mv`で一回で移動できるようにしました。
-cd ${HOME} && rmdir dotfiles
-
-
-## =================ログインshellをzshに変更===================
-sudo chsh vagrant -s /usr/bin/zsh
+yaourt -S --noconfirm man-pages-ja-git gitflow-avh-git
+# man-page-ja-git: 日本語man
+# gitflow-avh-git: git-flow tools
 
 
 # ================End of bootstraping====================
 # 実行したときの時間書き込み
-date | sudo tee /etc/bootstrapped
+cat $0 | sudo tee /etc/bootstrapped
+
+
+# **********First Login**********
+#         username: vagrant
+#         password: vagrant
+# *******************************
 sudo reboot
