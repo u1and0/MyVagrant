@@ -2,6 +2,12 @@
 
 ![image.png](https://qiita-image-store.s3.amazonaws.com/0/113494/a7f02a20-2ded-798a-ea7c-3d3e35522a5b.png)
 
+
+# はよ
+* [Vagrant Cloud](https://app.vagrantup.com/u1and0/boxes/archlinux)
+* `vagrant up u1and0/archlinux`
+
+
 # まえがき
 [VirtualBox 用 Ubuntu 16.04 LTS "Xenial Xerus" 日本語デスクトップ イメージ](https://qiita.com/yuki-takei/items/056e1184680f572d4c3d)のArchlinux版みたいなのが欲しくて作りました。
 イメージ作成はせずに既存のOSイメージ上でshellスクリプトで書いたプロビジョニングを走らせて日本語化・GUI化・dockerの設定行っております。
@@ -428,3 +434,9 @@ GUIを立ち上げずssh接続のみで使うなら不要。
 # まとめ
 既存のvagrantイメージファイル[terrywang/archlinux](https://app.vagrantup.com/terrywang/boxes/archlinux)と
 [オリジナルのセットアップスクリプト](https://github.com/u1and0/MyVagrant)を使って日本語化・GUI化・docker使用可能なArchlinux環境を組み立てました。
+
+
+# 追記v1.0.0
+* [Vagrant Cloud](https://app.vagrantup.com/u1and0/boxes/archlinux)にアップしました。
+* [xorgprotoとlibxfontによるパッケージアップデートの失敗](http://archlinux-blogger.blogspot.jp/2018/02/xorgprotoerror-failed-to-prepare.html)を回避しました。
+* これからは`bootstrap.sh`によるビルドはやめて`vagrant box add u1and0/archlinux`や`vagrant init u1and0/archlinux`から始めましょう。
