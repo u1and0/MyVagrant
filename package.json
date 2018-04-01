@@ -9,7 +9,7 @@
         "description_markdown": "Archlinux x86_64",
         "providers": [{
             "name": "virtualbox",
-            "url": "file:/mnt/e/Users/U1and0/VirtualMachines/cl_arch/package.box"
+            "url": "file:package.box"
         }]
     }]
 }
