@@ -417,6 +417,20 @@ GUIを立ち上げずssh接続のみで使うなら不要。
 > 一度xfceでログインすれば次回からは自動でユーザー名vagrantとして立ち上がる。
 
 
+
+# スクリーンショット
+![Screenshot from 2018-04-01 09-52-17.png](https://qiita-image-store.s3.amazonaws.com/0/113494/81676c1b-ef87-284f-6f5b-c64c1f552159.png)
+Who am I?
+
+![Screenshot from 2018-04-01 09-47-21.png](https://qiita-image-store.s3.amazonaws.com/0/113494/3552f200-739a-be13-4a54-3b6c1a7f26ab.png)
+【pacman高速化】powerpill使える
+
+![Screenshot from 2018-04-01 09-50-14.png](https://qiita-image-store.s3.amazonaws.com/0/113494/c15b76a0-d3d3-e1c5-4532-8a1ea62e6092.png)
+docker使える
+
+
+
+
 # まとめ
 既存のvagrantイメージファイル[terrywang/archlinux](https://app.vagrantup.com/terrywang/boxes/archlinux)と
 [オリジナルのセットアップスクリプト](https://github.com/u1and0/MyVagrant)を使って日本語化・GUI化・docker使用可能なArchlinux環境を組み立てました。
