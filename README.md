@@ -13,8 +13,6 @@ $ vagrant up
 
 Archlinux for Japanese
 
-日本語 / GUI環境のArchlinuxです。
-
 * ベースはterrywang/archlinux
 * pacmanの強化
     * reflector: 近くのサーバーを/etc/pacman.d/mirrorlistに登録
