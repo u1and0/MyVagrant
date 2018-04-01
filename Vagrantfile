@@ -49,7 +49,7 @@ Vagrant.configure("2") do |config|
     # クリップボードの共有: 双方向
     vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
   end
-  GUI=false
+  GUI=true
   if GUI
     config.vm.provider "virtualbox" do |gui|
       # Display the VirtualBox GUI when booting the machine
