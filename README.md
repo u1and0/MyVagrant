@@ -5,8 +5,31 @@
 
 # はよ
 * [Vagrant Cloud](https://app.vagrantup.com/u1and0/boxes/archlinux)
-* `vagrant up u1and0/archlinux`
 
+```Shell-session
+vagrant init u1and0/archlinux \
+  --box-version 1.0.0
+vagrant up
+``` 
+
+```
+Archlinux for Japanese
+
+日本語 / GUI環境のArchlinuxです。
+
+* ベースはterrywang/archlinux
+* pacmanの強化
+    * reflector: 近くのサーバーを/etc/pacman.d/mirrorlistに登録
+    * powerpill: pacman のラッパー。aria2cとか使って高速ダウンロード
+* GUI環境: xfce4
+* dockerをsudoなしで実行できる
+* the fuck: Corrects your previous console command
+* atool: Managing file archives of various types
+* vimpager: Syntax color highlighting pager
+* man-page-ja-git: 日本語man
+* gitflow-avh-git: git-flow tools
+* /etc/boostrapedを見るとterrywang/archlinuxのboxに対して実行したこと(provisioning)がわかります。
+```
 
 # まえがき
 [VirtualBox 用 Ubuntu 16.04 LTS "Xenial Xerus" 日本語デスクトップ イメージ](https://qiita.com/yuki-takei/items/056e1184680f572d4c3d)のArchlinux版みたいなのが欲しくて作りました。
@@ -170,7 +193,7 @@ test -f /etc/bootstrapped && exit
 
 ## 日本語環境の構築
 
-```bash:
+```bash
 sudo timedatectl set-timezone Asia/Tokyo  # タイムゾーン設定
 sudo cat << 'EOF' | sudo tee /etc/locale.conf
 LANG=ja_JP.UTF8
@@ -180,7 +203,7 @@ LC_MONETARY=ja_JP.UTF8
 LC_PAPER=ja_JP.UTF8
 LC_MEASUREMENT=ja_JP.UTF8
 EOF
-sudo mv /etc/locale.gen /etc/locale.gen.bac
+sudo mv /etc/locale.gen{,.bac}  # /etc/locale.genを/etc/locale.gen.bacにリネームする
 echo ja_JP.UTF-8 UTF-8 | sudo tee /etc/locale.gen
 sudo locale-gen
 sudo pacman -Syy
@@ -205,11 +228,23 @@ teeはリダイレクトを行いながら標準出力にも吐き出すコマ�
 
 ターミナル上で手動でやるならば`sudo vi`して該当箇所を変更すればいいのですが、自動化するにはひと工夫必要でした。これ以降何回も使っていきます。
 
+
+# Remove libxfont for pacman datebase error
+2018年2月頃から発生しているアップデート時のエラーです。
+対処法は以下を参考にして`libxfont`を削除して、全パッケージを再度アップデートすることです。
+
+[xorgprotoへのアップデートで、error: failed to prepare transaction (could not satisfy dependencies)のエラー](http://archlinux-blogger.blogspot.jp/2018/02/xorgprotoerror-failed-to-prepare.html)
+
+```bash:libxfontの削除
+sudo pacman -Rdd --noconfirm libxfont
+sudo pacman -Syu --noconfirm
+```
+
 # pacman強化
 ## powerpillインストール
 
 ```bash:powerpillインストール
-gpg --recv-keys --keyserver hkp://pgp.mit.edu 1D1F0DC78F173680
+gpg --recv-keys 1D1F0DC78F173680
 yaourt -S --noconfirm powerpill  # Use powerpill instead of pacman. Bye pacman...
 ```
 
@@ -224,14 +259,12 @@ yaourt -S --noconfirm powerpill  # Use powerpill instead of pacman. Bye pacman..
 ### powerpill SigLevel書き換え
 
 ```bash:SigLevel書換
-sudo cat /etc/pacman.conf |
-    sudo sed -e 's/Required DatabaseOptional/PackageRequired/' |
-        sudo tee /etc/pacman.conf
+sudo sed -ie 's/Required DatabaseOptional/PackageRequired/' /etc/pacman.conf
 ```
 
 `/etc/pacman.conf`というファイルの`Required DatabaseOptional`を`PackageRequired`に書き換えないと、ダウンロード時にエラーが表示されます。
 
-ここでも`sed`からのパイプで権限のあるファイルへのリダイレクトに`sudo tee`を使います。
+~~ここでも`sed`からのパイプで権限のあるファイルへのリダイレクトに`sudo tee`を使います。~~
 
 
 * [Powerpill](https://wiki.archlinux.jp/index.php/Powerpill)
@@ -244,7 +277,7 @@ sudo cat /etc/pacman.conf |
 
 ```bash:mirrorlist書き換え
 sudo pacman -Syu --noconfirm reflector
-sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bac
+sudo cp /etc/pacman.d/mirrorlist{,.bac}
 sudo reflector --verbose --country 'Japan' -l 10 --sort rate --save /etc/pacman.d/mirrorlist
 ```
 
@@ -320,9 +353,7 @@ sudo localectl set-keymap jp106
 
 ### 自動ログイン
 ```bash:自動ログイン
-sudo cat /etc/lightdm/lightdm.conf |
-    sudo sed -e 's/#autologin-user=/autologin-user=vagrant/' |
-        sudo tee /etc/lightdm/lightdm.conf
+sudo sed -ie 's/#autologin-user=/autologin-user=vagrant/' /etc/lightdm/lightdm.conf
 sudo groupadd -r autologin
 sudo gpasswd -a vagrant autologin
 # ↑一回目のログインはユーザー名とパスワード(どちらもvagrnat)打たないといけない
@@ -349,12 +380,14 @@ Vagrantfileに書く
 
 ## その他好きなもの
 ```bash:その他好きなもの
-yaourt -S --noconfirm man-pages-ja-git  # 日本語man
-sudo pacman -S --noconfirm fzf  # Simplistic interactive filtering tool
-sudo pacman -S --noconfirm thefuck  # Corrects your previous console command
-sudo pacman -S --noconfirm atool  # Managing file archives of various types
-yaourt -S --noconfirm gitflow-avh-git  # git-flow tools
-sudo pacman -S --noconfirm python-pygments pygmentize  # Python syntax highlighter
+sudo pacman -S --noconfirm thefuck atool vimpager
+# the fuck: Corrects your previous console command
+# atool: Managing file archives of various types
+# vimpager: Syntax color highlighting pager
+
+yaourt -S --noconfirm man-pages-ja-git gitflow-avh-git
+# man-page-ja-git: 日本語man
+# gitflow-avh-git: git-flow tools
 ```
 
 
@@ -367,48 +400,18 @@ sudo powerpill -Syu --noconfirm
 yaourt -Syua --noconfirm
 ```
 
-`yaourt`には`-Syu`に加えて`-a`オプションも必要らしいです。
-本当は今までの`pacman -S`を`pacman -Syu`にするべきなのかもしれませんが、実行速度が遅くなりそうなので`-S`だけにしています。その分ここで足並みそろえてもらうために`-Syu`
+~~`yaourt`には`-Syu`に加えて`-a`オプションも必要らしいです。~~
+~~本当は今までの`pacman -S`を`pacman -Syu`にするべきなのかもしれませんが、実行速度が遅くなりそうなので`-S`だけにしています。その分ここで足並みそろえてもらうために`-Syu`~~
 
-
-
-## shell環境構築
-### dotfilesのクローン
-
-```bash:dotfilesのクローン
-git clone --recursive --depth 1 https://github.com/u1and0/dotfiles.git
-cd ${HOME}/dotfiles  # クローンしたすべてのファイルをホームへ移動
-for i in `ls -A`
-do
-    mv -f $i ${HOME}
-done
-# `mv`の代わりに`cp`を使っても良いが、`cp *`だけだとドットファイル移動できないので、
-# `cp .*`も使う必要あり。冗長的なので`ls -A`と`mv`で一回で移動できるようにしました。
-cd ${HOME} && rmdir dotfiles
-```
-
-自分のdotfilesがあるならば`git clone`する場所を変えたほうがいいと思いますが、使うのも参考にするのも改良するのも自由です。
-
-`mv`と`for`文よりも`cd`して`cp .* ..`と`cp * ..`の方が良いかも？
-しかし`mv`であればもし移動できずにファイルが残った場合、次の`rmdir`でも取り残されたファイルだけが残ります。
-
-
-
-### ログインshellをzshに変更
-```bash:ユーザーvagrantのシェルをzshに変える
-sudo chsh vagrant -s /usr/bin/zsh
-```
-
-ターミナルからだと`chsh /usr/bin/zsh`だけでよかったのに自動化するには`ユーザー名 -sが必要らしいです。`
 
 
 ## 再bootstrap防止用ファイルの作成
 
 ```bash:再bootstrap防止用ファイルの作成
-date | sudo tee /etc/bootstrapped
+cat $0 | sudo tee /etc/bootstrapped
 ```
 
-プロビジョニングの最後に`/etc/bootstrapped`というファイルに実行した日付時刻を書きみます。
+プロビジョニングの最後に`/etc/bootstrapped`というファイルに実行した~~日付時刻~~プロビジョニングの内容を書きみます。
 
 `bootstrap.sh`はイニシャルセットアップスクリプトなので、初回起動時のみ動いたらお役御免です。次回以降`vagrant up`したときに発動しないようにするには`bootstrap.sh`の最初に書いた「/etc/bootstrappedというファイルがあれば終了」と合わせて`bootstrap.sh`の動きを封じます。
 
