@@ -43,35 +43,6 @@ yaourt -S --noconfirm powerpill  # Use powerpill instead of pacman. Bye pacman..
 sudo sed -ie 's/Required DatabaseOptional/PackageRequired/' /etc/pacman.conf
 
 
-# =================GUI環境===================
-sudo pacman -S --noconfirm xorg-xinit lightdm-gtk-greeter
-yes 'all' | sudo pacman -S --noconfirm xfce4 lightdm
-sudo systemctl enable lightdm.service
-# /etc/systemd/system/default.targetのリンクをmulti-user.targetからgraphical.targetに変える
-sudo systemctl set-default graphical.target
-
-
-## =================フォントとインプットメソッドのインストール===================
-yaourt -S --noconfirm otf-takao
-yes 'all' | sudo pacman -S --noconfirm fcitx-im fcitx-configtool fcitx-mozc
-
-sudo cat << 'EOF' > ${HOME}/.xprofile
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-export XMODIFIERS=”@im=fcitx”
-EOF
-
-## =================キーボードの設定===================
-sudo localectl set-keymap jp106
-
-
-## =================自動ログイン===================
-sudo sed -ie 's/#autologin-user=/autologin-user=vagrant/' /etc/lightdm/lightdm.conf
-
-sudo groupadd -r autologin
-sudo gpasswd -a vagrant autologin
-# ↑一回目のログインはユーザー名とパスワード(どちらもvagrnat)打たないといけない
-
 
 # =====================dockerセットアップ==========================
 sudo pacman -S --noconfirm docker  # dockerインストール

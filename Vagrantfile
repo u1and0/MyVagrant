@@ -45,19 +45,9 @@ Vagrant.configure("2") do |config|
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   config.vm.provider "virtualbox" do |vb|
-    vb.customize ["modifyvm", :id, "--memory", "2048"]
+    vb.customize ["modifyvm", :id, "--memory", "1024"]
     # クリップボードの共有: 双方向
     vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
-  end
-  GUI=true
-  if GUI
-    config.vm.provider "virtualbox" do |gui|
-      # Display the VirtualBox GUI when booting the machine
-      gui.gui = true
-      gui.customize ["modifyvm", :id, "--ioapic", "on"]
-      gui.customize ["modifyvm", :id, "--vram", "128"]
-      gui.customize ["modifyvm", :id, "--accelerate3d", "on"]
-    end
   end
 
   # View the documentation for the provider you are using for more
