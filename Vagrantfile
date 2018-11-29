@@ -42,6 +42,7 @@ Vagrant.configure("2") do |config|
   # config.vm.synced_folder "../data", "/vagrant_data"
   config.vm.synced_folder "~", "/home/u1and0", owner: "vagrant", group: "vagrant"
   config.vm.synced_folder "~/Dropbox", "/home/vagrant/Dropbox", owner: "vagrant", group: "vagrant"
+  config.vm.synced_folder "~/BoxSync", "/home/vagrant/BoxSync", owner: "vagrant", group: "vagrant"
   config.vm.synced_folder "~/Data", "/home/vagrant/Data", owner: "vagrant", group: "vagrant"
 
   # Provider-specific configuration so you can fine-tune various
@@ -51,16 +52,6 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--memory", "4096"]
     # クリップボードの共有: 双方向
     vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
-  end
-  GUI=false
-  if GUI
-    config.vm.provider "virtualbox" do |gui|
-      # Display the VirtualBox GUI when booting the machine
-      gui.gui = true
-      gui.customize ["modifyvm", :id, "--ioapic", "on"]
-      gui.customize ["modifyvm", :id, "--vram", "128"]
-      gui.customize ["modifyvm", :id, "--accelerate3d", "on"]
-    end
   end
 
   # View the documentation for the provider you are using for more
@@ -85,7 +76,7 @@ Vagrant.configure("2") do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   # run as root=>True, run as user=>False
-   config.vm.provision :shell, :path => "bootstrap.sh", :privileged => false
+  config.vm.provision :shell, :path => "bootstrap.sh", :privileged => false
   config.vm.provision "shell", inline: <<-SHELL
     ln -fs /home/{u1and0,vagrant}/.zsh_history
     ln -fs /home/{u1and0,vagrant}/yankring_history_v2.txt
