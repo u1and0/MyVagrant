@@ -12,7 +12,8 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "terrywang/archlinux"
+  config.vm.box = "u1and0/archlinux"
+  config.vm.box_version = "1.0.1"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -22,7 +23,8 @@ Vagrant.configure("2") do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-  # config.vm.network "forwarded_port", guest: 8888, host: 8888
+  config.vm.network "forwarded_port", guest: 22, host: 2222, id: "ssh", auto_correct: true
+  config.vm.network "forwarded_port", guest: 8888, host: 8888,  auto_correct: true
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -38,14 +40,15 @@ Vagrant.configure("2") do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
+  config.vm.synced_folder "~", "/home/u1and0", owner: "vagrant", group: "vagrant"
   config.vm.synced_folder "~/Dropbox", "/home/vagrant/Dropbox", owner: "vagrant", group: "vagrant"
-  config.vm.synced_folder "~/.history", "/home/vagrant/.history", owner: "vagrant", group: "vagrant"
+  config.vm.synced_folder "~/Data", "/home/vagrant/Data", owner: "vagrant", group: "vagrant"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   config.vm.provider "virtualbox" do |vb|
-    vb.customize ["modifyvm", :id, "--memory", "2048"]
+    vb.customize ["modifyvm", :id, "--memory", "4096"]
     # クリップボードの共有: 双方向
     vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
   end
@@ -83,9 +86,10 @@ Vagrant.configure("2") do |config|
   # documentation for more information about their specific syntax and use.
   # run as root=>True, run as user=>False
    config.vm.provision :shell, :path => "bootstrap.sh", :privileged => false
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   apt-get update
-  #   apt-get install -y apache2
-  # SHELL
+  config.vm.provision "shell", inline: <<-SHELL
+    ln -fs /home/{u1and0,vagrant}/.zsh_history
+    ln -fs /home/{u1and0,vagrant}/yankring_history_v2.txt
+    ln -fs /home/{u1and0,vagrant}/.fasd
+  SHELL
   config.ssh.insert_key=false  # root user ssh for sharing with windows machine
 end
